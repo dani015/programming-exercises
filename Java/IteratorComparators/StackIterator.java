@@ -1,0 +1,62 @@
+import java.util.Iterator;
+
+public class StackIterator implements Iterable<Integer> {
+    private Node top;
+
+    private class Node{
+        private int element;
+        private Node previous;
+
+        Node(int element){
+            this.element = element;
+            this.previous = null;
+        }
+    }
+
+
+    public StackIterator(){
+        this.top = null;
+    }
+
+    public void push(int element){
+        Node newNode = new Node(element);
+        if(this.top == null){
+            this.top = newNode;
+        } else {
+            newNode.previous = this.top;
+            this.top = newNode;
+        }
+    }
+
+    public int pop(){
+        if(this.top == null){
+            throw new IllegalArgumentException("No elements");
+        }
+
+        int element = this.top.element;
+
+        this.top = this.top.previous;
+
+        return element;
+    }
+
+    @Override
+    public Iterator<Integer> iterator() {
+        return new Iterator<Integer>() {
+            private Node currentNode = top;
+            @Override
+            public boolean hasNext() {
+                return this.currentNode != null;
+            }
+
+            @Override
+            public Integer next() {
+                int element = this.currentNode.element;
+
+                this.currentNode = this.currentNode.previous;
+
+                return element;
+            }
+        };
+    }
+}
